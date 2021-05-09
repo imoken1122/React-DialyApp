@@ -1,0 +1,63 @@
+const pubtime = () =>{
+    const a = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
+    var str = a.getFullYear()
+        + '-' + ('0' + (a.getMonth() + 1)).slice(-2)
+        + '-' + ('0' + a.getDate()).slice(-2)
+        + 'T' + ('0' + a.getHours()).slice(-2)
+        + ':' + ('0' + a.getMinutes()).slice(-2)
+        +"Z"
+    return str
+}
+
+
+export const postPost = (info) => {
+
+    let jsoninfo = JSON.stringify(info)
+    console.log(jsoninfo)
+    const method = "POST"
+    const type = "Content-Type:application/json"
+    return  fetch("http://localhost:8000/post/new/" ,{
+        method:method,
+        body:jsoninfo
+    }).then((response) => 
+        console.log(response.json())) 
+        .then((responseJson) => {
+            console.log(responseJson)
+        }
+    ).catch((error) =>{
+        console.error(error);
+    })
+}
+
+
+export const postDelete = (id) =>{
+    const method = "DELETE"
+    return  fetch(`http://localhost:8000/posts/${id}/` ,{
+        method:method,})
+}
+export const postEdit =(id)=>{
+    const method = "PUT"
+    return  fetch(`http://localhost:8000/posts/${id}/` ,{
+        method:method,})
+    
+}
+export const addCategory = (cat) =>{
+    const method = "POST"
+    let jsoninfo = JSON.stringify(cat)
+    return  fetch(`http://localhost:8000/addcat/` ,{
+        method:method,
+        body:jsoninfo
+    }).then((response) => 
+        console.log(response.json())) 
+        .then((responseJson) => {
+            console.log(responseJson)
+        }
+    ).catch((error) =>{
+        console.error(error);
+    })
+}
+export const rmCategory = (cat) =>{
+    const method = "DELETE"
+    return  fetch(`http://localhost:8000/rmcat/${cat}` ,{
+        method:method,})
+}
