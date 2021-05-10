@@ -29,6 +29,24 @@ export const postPost = (info) => {
     })
 }
 
+export const postPostEdit = (info) => {
+
+    let jsoninfo = JSON.stringify(info)
+    console.log(jsoninfo)
+    const method = "PUT"
+    const type = "Content-Type:application/json"
+    return  fetch(`http://localhost:8000/posts/${info.id}/` ,{
+        method:method,
+        body:jsoninfo
+    }).then((response) => 
+        console.log(response.json())) 
+        .then((responseJson) => {
+            console.log(responseJson)
+        }
+    ).catch((error) =>{
+        console.error(error);
+    })
+}
 
 export const postDelete = (id) =>{
     const method = "DELETE"
@@ -60,4 +78,20 @@ export const rmCategory = (cat) =>{
     const method = "DELETE"
     return  fetch(`http://localhost:8000/rmcat/${cat}` ,{
         method:method,})
+}
+export const putCategory = (info)=> {
+    let jsoninfo = JSON.stringify(info)
+    console.log(jsoninfo)
+    const method = "PUT"
+    return  fetch(`http://localhost:8000/editcat/${info.id}` ,{
+        method:method,
+        body:jsoninfo
+    }).then((response) => 
+        console.log(response.json())) 
+        .then((responseJson) => {
+            console.log(responseJson)
+        }
+    ).catch((error) =>{
+        console.error(error);
+    })
 }

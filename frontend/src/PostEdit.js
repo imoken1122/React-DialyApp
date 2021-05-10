@@ -10,9 +10,8 @@ import { getPost } from "./api/getDialy";
 class PostEdit extends React.Component {
   constructor(props){
     super(props);
-    this.info = {"isOpen":"True","published_date":"","title":"","text":"","category":""}
     this.info = props.info
-
+    console.log(this.info)
 
   }
   

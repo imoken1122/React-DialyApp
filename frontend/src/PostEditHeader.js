@@ -8,7 +8,7 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import CheckIcon from '@material-ui/icons/Check';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
-import {postPost} from "./api/postDialy"
+import {postPost,postPostEdit} from "./api/postDialy"
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -70,6 +70,10 @@ function handlerClick(info){
 
     if(info.title == "" || info.text == ""){
         alert('空欄があります') 
+    }else if(info.id){
+        if(info.category == "") info.category = "未分類"
+        info.published_date = pubtime()
+        postPostEdit(info)  
     }else {
         if(info.category == "") info.category = "未分類"
         info.published_date = pubtime()

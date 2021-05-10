@@ -166,7 +166,7 @@ function SubPost(props){
       <ListItem button key={props.id} onClick={handlelist} component={Link} style={{color:"black" ,fontSize:17, textDecoration: "none"}} to={`/posts/${props.id}`} >
               <ListItemIcon><DescriptionIcon className={classes.icon}  fontSize="large"/></ListItemIcon>
               <ListItemText >
-                  <p style={{fontSize:25}}>{props.title}</p>
+                  <p style={{fontSize:20}}>{props.title}</p>
                </ListItemText>
               <Typography >{tf(props.published_date)}</Typography> 
 

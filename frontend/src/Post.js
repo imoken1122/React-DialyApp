@@ -97,7 +97,7 @@ function Post() {
                     style = {{fontSize:15,color:"#434343",marginTop:0,marginLeft:20}}
                     disabled
                     fullWidth
-                    value=""
+                    value={`${tf(detail.published_date)}   編集`}
 
                 />
             <Divider  style = {{position:"reactive",marginTop:40}}/>
