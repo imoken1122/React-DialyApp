@@ -14,7 +14,7 @@ from . import serializer
 @csrf_exempt
 def Posts(request):
     if request.method == "GET":
-        posts = Dialy.objects.filter(isOpen="True").order_by('-published_date')
+        posts = Dialy.objects.filter(isOpen="True").order_by('-created_date')
         sl = serializer.PostsSerializer(posts, many = True)
         return JsonResponse(sl.data,safe=False)
 
@@ -72,16 +72,25 @@ def OPCategory(request):
         return JsonResponse(sl.errors, status=400)
 
 @csrf_exempt
-def RmCategory(request,pk):
+def RmPutCategory(request,pk):
+    try:
+        cat = Category.objects.get(id = pk)
+        print(cat)
+    except  Category.DoesNotExist:
+        return HttpResponse(status=404) 
     if request.method == "DELETE":
-        try:
-            cat = Category.objects.get(id = pk)
-            print(cat)
-        except  Category.DoesNotExist:
-            return HttpResponse(status=404) 
         cat.delete()
-        return HttpResponse(status = 204) 
 
+        dialy = Dialy.objects.filter(category=cat.category)
+        dialy.delete()
+        return HttpResponse(status = 204) 
+    elif request.method == "PUT":
+        data = JSONParser().parse(request)
+        sl = serializer.CategorySerializer(cat,data=data)
+        if sl.is_valid():
+            sl.save()
+            return JsonResponse(sl.data)
+        return JsonResponse(sl.errors, status=400)
 
 class DetailDialy(APIView):
     def get(self,request,pk):

@@ -8,7 +8,8 @@ urlpatterns = [
     path('post/new/', views.Posts), 
     path('getcat/',views.OPCategory),
     path('addcat/',views.OPCategory),
-    path('rmcat/<int:pk>/',views.RmCategory),
+    path('editcat/<int:pk>',views.RmPutCategory),
+    path('rmcat/<int:pk>/',views.RmPutCategory),
 
 
     #path("post/<int:pk>/edit", views.EditDiary.as_view()),
