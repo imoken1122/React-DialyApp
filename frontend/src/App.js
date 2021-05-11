@@ -5,6 +5,7 @@ import PostEditRoute from "./PostEditRoute"
 import FolderPostList from "./FolderPostList"
 import Post from "./Post"
 import Home from "./Home"
+import Login from "./auth/Login"
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 const App = () => {  
 
@@ -13,6 +14,7 @@ const App = () => {
         <Router>
           <div>
             <Switch>
+                <Route exact path='/login' component={Login} />
                 <Route exact path='/posts' component={Home} />
                 <Route exact path='/posts/:id' component={Post} />
                 <Route exact path='/post/new' component = {PostNew} />

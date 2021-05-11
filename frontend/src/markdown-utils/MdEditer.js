@@ -93,6 +93,7 @@ class Mde extends React.Component{
         }
         this.updateMD = this.updateMD.bind(this)
         this.updateTitle = this.updateTitle.bind(this)
+
         this.classes = makeStyles((theme) => ({
             root: {
               flexGrow: 1,
@@ -113,7 +114,8 @@ class Mde extends React.Component{
 
       this.setState({markdown:e.target.value})
       this.state.markdown = e.target.value
-
+      
+      console.log(this.state)
         this.props.myFunc("text",this.state.markdown)
     }
     updateCat(cat){
@@ -121,6 +123,7 @@ class Mde extends React.Component{
       this.props.myFunc("category",this.state.category)
         console.log(this.state)
     }
+
     render(){
         const h = window.innerHeight
         const html = marked(this.state.markdown)
@@ -130,6 +133,7 @@ class Mde extends React.Component{
                     inputProps={{style: {fontSize: 30, lineHeight:1.4}}} 
                     style = {{width: '50%' , top:80, marginRight:50}}
                     onChange={this.updateTitle}
+
                     variant="filled"
                     label="タイトル入力"
                     defaultValue={this.flag ? this.state.title : ""}
@@ -142,6 +146,7 @@ class Mde extends React.Component{
                         variant="filled"
                         style = {{width: '50%', top:6, marginRight:60}}
                         onChange={this.updateMD}
+
                            label="Markdownで本文を入力..."
                     defaultValue={this.flag ? this.state.markdown : ""}
                         />
