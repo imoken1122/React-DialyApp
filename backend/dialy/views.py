@@ -92,42 +92,6 @@ def RmPutCategory(request,pk):
             return JsonResponse(sl.data)
         return JsonResponse(sl.errors, status=400)
 
-class DetailDialy(APIView):
-    def get(self,request,pk):
-        try:
-            try:
-                d = Dialy.objects.get(id=pk)
-            except:
-                return Response("記事が存在しません",status=status.HTTP_404_NOT_FOUND)
-
-            res = {
-                "id":d.id,
-                "date":d.published_date,
-                "title":d.title,
-                "text":d.text,
-
-            }
-            return Response(res)
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-class ListDiary(APIView):
-    def get(self,request):
-        try:
-            dialy = Dialy.objects.filter(published_date__lte=timezone.now()).order_by('-published_date')
-            res_list =[
-                {
-                    "id":d.id,
-                    "date":d.published_date,
-                    "title":d.title,
-                    "folder":d.category
-
-                }
-                for d in dialy
-            ]
-            return Response(res_list)
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
 class CategoryDialy(APIView):
     def get(self,request,cat):
         try:
@@ -146,16 +110,15 @@ class CategoryDialy(APIView):
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class CategoryName(APIView):
-    def get(self,request):
-        try:
-            cat_list = sorted(set(Dialy.objects.values_list("category",flat = True)))
-            res_list = [
-                {"category":d} for d in cat_list
-                ]
-            return Response(res_list)
-        except:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+from .serializer import MyTokenObtainPairSerializer #追加
+from rest_framework_simplejwt.views import TokenObtainPairView 
+#追加
+class ObtainTokenPairWithColorView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
 
 
 

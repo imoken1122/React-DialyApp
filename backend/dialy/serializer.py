@@ -12,3 +12,18 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ("id","category")
+
+
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer #追加
+
+#トークンを発行するためのクラス
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user):
+        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
+        token['name']= user.name
+        token['email']= user.email
+        # Add custom claims
+        return token
