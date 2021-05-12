@@ -1,6 +1,8 @@
+from django.db.models import fields
 from rest_framework import serializers
 from django.utils import timezone
-from .models import Dialy,Category
+from .models import Dialy,Category,User
+#from django.contrib.auth.models import User  
 class PostsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Dialy
@@ -14,6 +16,10 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = ("id","category")
 
 
+class SignUpSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("id","email","name","password")
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer #追加
 
@@ -22,8 +28,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
     def get_token(cls, user):
-        token = super(MyTokenObtainPairSerializer, cls).get_token(user)
-        token['name']= user.name
-        token['email']= user.email
+        token = super().get_token(user)
+
+
         # Add custom claims
         return token
+
+

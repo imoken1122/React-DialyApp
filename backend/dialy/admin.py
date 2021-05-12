@@ -11,4 +11,4 @@ admin.site.register(Category, MarkdownxModelAdmin)
 
 
 
-admin.site.register(User, UserAdmin)
+admin.site.register(User)

@@ -4,15 +4,12 @@ from markdownx.models import MarkdownxField
 from django.utils import timezone
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
-from django.contrib.auth.validators import UnicodeUsernameValidator
-from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.contrib.auth.hashers import make_password  
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
-from django.core.mail import send_mail
-import uuid as uuid_lib
 
 # Create your models here.
 class Dialy(models.Model):
@@ -30,56 +27,68 @@ class Dialy(models.Model):
 class Category(models.Model):
     category = models.CharField(max_length=20)
 
-class UserManager(BaseUserManager):
-    def create_user(self,username, email, password=None):
-        """
-        Creates and saves a User with the given email, date of
-        birth and password.
-        """
-        if not username:
-            raise ValueError('Users must have an username')
+
+class UserProfileManager(BaseUserManager):
+    """Manager for user profiles"""
+
+    # ユーザを作成するメソッド
+    def create_user(self, email, name, password=None):
+        """Create a new user profile"""
+
+        # emailが入力されていないときはValueErrorを呼び出す
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('User must have an email address')
 
-        user = self.model(
-            username = username,
-            email=self.normalize_email(email),
-
-        )
-        user.is_staff = True
-        user.is_superuser=False
+        # emailのドメインを小文字に変換
+        email = self.normalize_email(email)
+        # UserProfileモデルを参照してuserを定義
+        user = self.model(email=email, name=name)
+        # userが入力したパスワードをハッシュ化
         user.set_password(password)
+        # settings.pyでdefaultに設定されているDBに保存
         user.save(using=self._db)
+
         return user
 
-    def create_superuser(self, username, email, password=None):
-        """
-        Creates and saves a superuser with the given email, date of
-        birth and password.
-        """
-        user = self.create_user(
-            username = username,
-            email = email,
-            password=password,
-        )
+    def create_superuser(self, email, name, password):
+        """Create and save a new superuser with given details"""
+
+        # 上記create_userを利用
+        user = self.create_user(email, name, password)
+
+        # superuserの権限を適用
         user.is_superuser = True
         user.is_staff = True
         user.save(using=self._db)
+
         return user
 
 
-
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=30,unique = True)
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
-    is_staff = models.BooleanField(default=False)
+    """Database model for users in the system"""
+
+    # カラム名 = データ型（オプション）
+    email = models.EmailField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
+    # ユーザが退会したらここをFalseにする（論理削除）
     is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    # 管理画面にアクセスできるか
+    is_staff = models.BooleanField(default=False)
+    # Managerのメソッドを使えるようにする
+    objects = UserProfileManager()
+    # emailを利用したログイン認証に変更
+    USERNAME_FIELD = 'email'
+    # 必須項目追加
+    REQUIRED_FIELDS = ['name']
 
-    objects = UserManager()
+    # 1つのnameフィールドで表示したいので、既存のメソッドをオーバーライド
+    def get_full_name(self):
+        """Retrieve full name of user"""
+        return self.name
 
-    EMAIL_FIELD = 'email'
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ["email"]
+    def get_short_name(self):
+        """Retrieve short name of user"""
+        return self.name
+
+    def __str__(self):
+        return self.email

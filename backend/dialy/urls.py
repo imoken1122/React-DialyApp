@@ -10,7 +10,7 @@ urlpatterns = [
     path('addcat/',views.OPCategory),
     path('editcat/<int:pk>',views.RmPutCategory),
     path('rmcat/<int:pk>/',views.RmPutCategory),
-
+    path("signup/", views.SignUp)
 
     #path("post/<int:pk>/edit", views.EditDiary.as_view()),
     #path("post/<pk>/rm",views.RmDiary.as_view())

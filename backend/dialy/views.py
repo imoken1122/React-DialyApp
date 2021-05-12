@@ -5,11 +5,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status, viewsets, filters
 from django.utils import timezone
-from .models import Category, Dialy 
+from .models import Category, Dialy ,User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
 from . import serializer 
+from django.contrib.auth.hashers import make_password 
+#from django.contrib.auth.models import User  
 
 @csrf_exempt
 def Posts(request):
@@ -91,11 +93,29 @@ def RmPutCategory(request,pk):
             sl.save()
             return JsonResponse(sl.data)
         return JsonResponse(sl.errors, status=400)
+@csrf_exempt
+def SignUp(request):
+    if request.method == "POST":
+
+        data = JSONParser().parse(request)
+        print(data)
+        data["password"]=make_password(data["password"])
+        sl = serializer.SignUpSerializer(data=data)
+
+        if sl.is_valid():
+            print(1)
+            sl.save()
+            return JsonResponse(sl.data,status = 201)
+        return JsonResponse(sl.errors, status=400)
+
+
 
 class CategoryDialy(APIView):
     def get(self,request,cat):
+        
         try:
             dialy = Dialy.objects.filter(isOpen="True",category=cat).order_by('-published_date')
+
             res_list =[
                 {
                     "id":d.id,
@@ -113,11 +133,13 @@ class CategoryDialy(APIView):
 
 
 
+
 from .serializer import MyTokenObtainPairSerializer #追加
 from rest_framework_simplejwt.views import TokenObtainPairView 
 #追加
 class ObtainTokenPairWithColorView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 
 
