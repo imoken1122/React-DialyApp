@@ -8,13 +8,19 @@ from django.utils import timezone
 from .models import Category, Dialy ,User
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import permission_classes,authentication_classes,api_view
 from rest_framework.parsers import JSONParser
 from . import serializer 
 from django.contrib.auth.hashers import make_password 
+from rest_framework.permissions import IsAuthenticated  
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 #from django.contrib.auth.models import User  
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def Posts(request):
+
     if request.method == "GET":
         posts = Dialy.objects.filter(isOpen="True").order_by('-created_date')
         sl = serializer.PostsSerializer(posts, many = True)
