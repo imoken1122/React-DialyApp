@@ -21,7 +21,7 @@ function FolderPostList(){
   const [category_state, setCat] = useState(state)
   const[loading, setLoading] = useState(true);
   const {cat} = useParams()
-
+  console.log(cat)
   useEffect(() => {
     getCategoryPostList(cat)
     .then(d => {

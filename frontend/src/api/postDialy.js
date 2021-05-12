@@ -1,3 +1,4 @@
+import axios from 'axios';
 const pubtime = () =>{
     const a = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
     var str = a.getFullYear()
@@ -84,6 +85,41 @@ export const putCategory = (info)=> {
     console.log(jsoninfo)
     const method = "PUT"
     return  fetch(`http://localhost:8000/editcat/${info.id}` ,{
+        method:method,
+        body:jsoninfo
+    }).then((response) => 
+        console.log(response.json())) 
+        .then((responseJson) => {
+            console.log(responseJson)
+        }
+    ).catch((error) =>{
+        console.error(error);
+    })
+}
+
+
+export const getJwt = async (data) => {
+    const method = "POST"
+        console.log(data)
+    let jsoninfo = JSON.stringify(data)
+    return await axios.post(`http://localhost:8000/api/v1/auth/jwt/create` ,{
+        email:data.email,
+        password:data.password
+    })
+}
+
+
+export const signup = (info) => {
+
+    let jsoninfo = JSON.stringify(info)
+    console.log(jsoninfo)
+    const method = "POST"
+    const type = "Content-Type:application/json"
+    return  fetch("http://localhost:8000/signup/" ,{
+        headers:{
+            'Accept': 'application/json',
+            'Content-type':'application/json'    
+          },
         method:method,
         body:jsoninfo
     }).then((response) => 

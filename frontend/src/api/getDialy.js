@@ -36,3 +36,5 @@ export const getCategoryName = async() =>{
     })
     return await toJson(res)
 }
+
+
