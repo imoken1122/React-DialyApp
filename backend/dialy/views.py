@@ -40,6 +40,8 @@ def Posts(request):
 
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def PostDetail(request,pk):
     try:
         post = Dialy.objects.get(id = pk)
@@ -62,6 +64,8 @@ def PostDetail(request,pk):
         post.delete()
         return HttpResponse(status = 204)
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def OPCategory(request):
     if request.method == "GET":
         cat_list = Category.objects.all()
@@ -80,6 +84,8 @@ def OPCategory(request):
         return JsonResponse(sl.errors, status=400)
 
 @csrf_exempt
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def RmPutCategory(request,pk):
     try:
         cat = Category.objects.get(id = pk)
@@ -115,13 +121,14 @@ def SignUp(request):
         return JsonResponse(sl.errors, status=400)
 
 
-
 class CategoryDialy(APIView):
+
+    permission_classes = [IsAuthenticated]
     def get(self,request,cat):
-        
+
         try:
             dialy = Dialy.objects.filter(isOpen="True",category=cat).order_by('-published_date')
-
+            print(dialy,cat)
             res_list =[
                 {
                     "id":d.id,
