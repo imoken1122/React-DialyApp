@@ -11,23 +11,6 @@ from django.contrib.auth.hashers import make_password
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-# Create your models here.
-class Dialy(models.Model):
-    created_date = models.DateTimeField(default=timezone.now) # 日付と時間のフィールド
-    published_date = models.DateTimeField(blank=True, null=True)
-    category = models.CharField(max_length=200)
-    title = models.CharField(max_length=200)
-    text = MarkdownxField()
-    isOpen = BooleanField()
-
-
-    def __str__(self):
-        return self.title
-        
-class Category(models.Model):
-    category = models.CharField(max_length=20)
-
-
 class UserProfileManager(BaseUserManager):
     """Manager for user profiles"""
 
@@ -92,3 +75,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+
+# Create your models here.
+class Dialy(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_date = models.DateTimeField(default=timezone.now) # 日付と時間のフィールド
+    published_date = models.DateTimeField(blank=True, null=True)
+    category = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
+    text = MarkdownxField()
+    isOpen = BooleanField()
+
+
+    def __str__(self):
+        return self.title
+        
+class Category(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    category = models.CharField(max_length=20)
+

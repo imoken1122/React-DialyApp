@@ -14,17 +14,21 @@ from . import serializer
 from django.contrib.auth.hashers import make_password 
 from rest_framework.permissions import IsAuthenticated  
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-#from django.contrib.auth.models import User  
+from rest_framework.response import Response
+from rest_framework import permissions, status #追加
+from rest_framework_jwt.authentication import JSONWebTokenAuthentication #追加
+
 
 @csrf_exempt
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def Posts(request):
-
+    send_token = request.META.get("HTTP_AUTHORIZATION")[4:]
     if request.method == "GET":
         posts = Dialy.objects.filter(isOpen="True").order_by('-created_date')
-        sl = serializer.PostsSerializer(posts, many = True)
-        return JsonResponse(sl.data,safe=False)
+        sl = serializer.PostsSerializer(posts, many = True).data
+
+        return JsonResponse(sl,safe=False)
 
     elif request.method == "POST":
 
@@ -105,6 +109,7 @@ def RmPutCategory(request,pk):
             sl.save()
             return JsonResponse(sl.data)
         return JsonResponse(sl.errors, status=400)
+"""
 @csrf_exempt
 def SignUp(request):
     if request.method == "POST":
@@ -119,7 +124,7 @@ def SignUp(request):
             sl.save()
             return JsonResponse(sl.data,status = 201)
         return JsonResponse(sl.errors, status=400)
-
+"""
 
 class CategoryDialy(APIView):
 
@@ -145,15 +150,17 @@ class CategoryDialy(APIView):
 
 
 
+class SignUp(APIView):
+    permission_classes = [permissions.AllowAny]
 
-
-from .serializer import MyTokenObtainPairSerializer #追加
-from rest_framework_simplejwt.views import TokenObtainPairView 
-#追加
-class ObtainTokenPairWithColorView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-
-
-
-
-
+    def post(self,request):
+        user = request.data
+        print(user)
+        if not user:
+            return Response({'response' : 'error', 'message' : 'No data found'})
+        sl = serializer.UserSerializerWithToken(data = user)
+        if sl.is_valid():
+            saved_user = sl.save()
+        else:
+            return Response({"response" : "error", "message" : sl.errors})
+        return Response({"response" : "success", "message" : "user created succesfully"})
