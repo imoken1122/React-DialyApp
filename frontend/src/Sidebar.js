@@ -1,6 +1,7 @@
 
 import { makeStyles } from '@material-ui/core/styles';
 
+import { withCookies } from 'react-cookie';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -8,7 +9,6 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Drawer from '@material-ui/core/Drawer';
-
 import FolderIcon from '@material-ui/icons/Folder'
 import List from '@material-ui/core/List';
 import CreateNewFolderIcon from '@material-ui/icons/CreateNewFolder';
@@ -16,23 +16,15 @@ import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Alert from '@material-ui/lab/Alert';
 import {getCategoryName } from "./api/getDialy"
-
 import TextField from '@material-ui/core/TextField';
 import {addCategory} from "./api/postDialy"
-
-
 import IconButton from '@material-ui/core/IconButton';
-
-
-
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -258,7 +250,7 @@ function LongMenu(props) {
     </div>
   );
 }
-function Sidebar(){
+function Sidebar(props){
     const classes = useStyles();
     const state = {id:"",category:""}
     const [cat, setCat] = useState(state)
@@ -276,10 +268,11 @@ function Sidebar(){
 
     }
     useEffect(()=>{
-      getCategoryName().then(d => {
+      getCategoryName(props.cookies.get("dialy-token")).then(d => {
             setCat(d)
             setLoading(false)
         }).catch(e =>{
+
             throw new Error(e)
         })
     },[])
@@ -337,4 +330,4 @@ function Sidebar(){
     );
 }
 
-export default Sidebar;
+export default withCookies(Sidebar);

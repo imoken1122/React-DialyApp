@@ -3,9 +3,9 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
 import React, { useState, useEffect, useRef } from 'react';
-import { useCookies } from 'react-cookie';
 import  { useHistory } from 'react-router-dom';
 import {getJwt, signup} from "../api/postDialy"
+import { withCookies } from 'react-cookie'
 function sleep(a){
     var dt1 = new Date().getTime();
     var dt2 = new Date().getTime();
@@ -16,9 +16,8 @@ function sleep(a){
   }
 const Form = (props) => {
 
-
+    console.log(props.nameFunc)
     const history = useHistory()
-    const [cookie, setCookie] = useCookies()
     let info = {"email":"","name":"","password":""}
     if (props.login){
         info = {"email":"","password":""}
@@ -29,10 +28,11 @@ const Form = (props) => {
             console.log(userinfo)
             getJwt(userinfo).then(res => {
 
-                console.log(res)
-                setCookie("accesstoken", res.data.access, {path:"/"},{httpOnly:true})
-                setCookie("refreshtoken", res.data.refresh, {path:"/"},{httpOnly:true})
-                history.push("/posts")
+                props.cookies.set("dialy-token", res.data.token)
+                console.log(res.data.user)
+                props.nameFunc(res.data.user.id)
+                window.location.href="/posts"
+
             }).catch(err=>{
                 console.log(err)
                 alert("username or password が違います")
@@ -47,16 +47,16 @@ const Form = (props) => {
             sleep(2500)
             getJwt(jwtinfo).then(res => {
                 console.log(res)
-                setCookie("accesstoken", res.data.access, {path:"/"},{httpOnly:true})
-                setCookie("refreshtoken", res.data.refresh, {path:"/"},{httpOnly:true})
-                history.push("/posts")}).catch(err=>{
+                props.cookies.set("dialy-token", res.data.token)
+                props.nameFunc(res.data.name)
+                window.location.href="/posts"
+            }).catch(err=>{
                     console.log(err)
                     alert("予期しないエラー")
                 })
         })
 
     }
-    console.log(cookie.acccesstoken)
     const onChangehandler = (e) => {
         setUserInfo(userinfo => ({...userinfo ,[e.target.name]:e.target.value}))
         userinfo[e.target.name] = e.target.value
@@ -106,4 +106,4 @@ const Form = (props) => {
     )
 }
 
-export default Form
+export default withCookies(Form)

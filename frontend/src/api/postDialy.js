@@ -102,7 +102,7 @@ export const getJwt = async (data) => {
     const method = "POST"
         console.log(data)
     let jsoninfo = JSON.stringify(data)
-    return await axios.post(`http://localhost:8000/api/v1/auth/jwt/create` ,{
+    return await axios.post(`http://localhost:8000/api/token/` ,{
         email:data.email,
         password:data.password
     })

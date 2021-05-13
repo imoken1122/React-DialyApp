@@ -6,6 +6,7 @@ import Header from "./Header"
 import MDViewer from "./markdown-utils/MdViewer"
 import marked from 'marked';
 
+import { withCookies } from 'react-cookie';
 import CreateIcon from '@material-ui/icons/Create';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -39,7 +40,7 @@ function tf(time){
     return `${b[0]}年${b[1]}月${b[2]}日  ${c}` 
   }
   
-function Post() {
+function Post(props) {
   const state = {id:'',created_date:'',published_date:'',title:'',text:'',category:''}
   const [detail, setDetail] = useState(state)
   const [loading, setLoading] = useState(true)
@@ -48,7 +49,7 @@ function Post() {
   const classes = useStyles1();
 
     useEffect(()=>{
-        getPost(id).then(d => {
+        getPost(id,props.cookies.get("dialy-token")).then(d => {
             setDetail(d)
             setLoading(false)
         }).catch(e =>{
@@ -97,7 +98,7 @@ function Post() {
                     style = {{fontSize:15,color:"#434343",marginTop:0,marginLeft:20}}
                     disabled
                     fullWidth
-                    value={`${tf(detail.published_date)}   編集`}
+                    value={detail.published_date ?`${tf(detail.published_date)}  編集` : ""}
 
                 />
             <Divider  style = {{position:"reactive",marginTop:40}}/>
@@ -113,4 +114,4 @@ function Post() {
     </div>
   )
 }
-export default Post
+export default withCookies(Post)

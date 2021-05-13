@@ -168,7 +168,7 @@ function SubPost(props){
               <ListItemText >
                   <p style={{fontSize:20}}>{props.title}</p>
                </ListItemText>
-              <Typography >{tf(props.published_date)}</Typography> 
+              <Typography >{tf(props.created_date)}</Typography> 
 
               <LongMenu id={props.id} className={classes.menu} />
       </ListItem>

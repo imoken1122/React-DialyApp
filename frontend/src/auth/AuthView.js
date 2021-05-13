@@ -6,6 +6,7 @@ import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
+import {  withCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 import Form from "./Form"
@@ -50,7 +51,7 @@ function AuthView(props) {
     if (props.bool == 3){
         parts = <Select />
     }else{
-        parts = <Form login={props.bool} />
+        parts = <Form login={props.bool} cookies={props.cookies} nameFunc={props.nameFunc}/>
     }
 
     return (
@@ -81,4 +82,4 @@ function AuthView(props) {
 
 }
 
-export default AuthView
+export default  withCookies(AuthView)
