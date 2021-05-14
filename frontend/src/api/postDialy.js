@@ -9,15 +9,19 @@ const pubtime = () =>{
         +"Z"
     return str
 }
+let userid = localStorage.getItem("userid");
 
-
-export const postPost = (info) => {
+export const postPost = (info,cookies) => {
 
     let jsoninfo = JSON.stringify(info)
-    console.log(jsoninfo)
+    console.log(jsoninfo,cookies)
     const method = "POST"
     const type = "Content-Type:application/json"
-    return  fetch("http://localhost:8000/post/new/" ,{
+    return fetch(`http://localhost:8000/${userid}/post/new/` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,
         body:jsoninfo
     }).then((response) => 
@@ -30,13 +34,17 @@ export const postPost = (info) => {
     })
 }
 
-export const postPostEdit = (info) => {
+export const postPostEdit = (info,cookies) => {
 
     let jsoninfo = JSON.stringify(info)
     console.log(jsoninfo)
     const method = "PUT"
     const type = "Content-Type:application/json"
-    return  fetch(`http://localhost:8000/posts/${info.id}/` ,{
+    return  fetch(`http://localhost:8000/${userid}/posts/${info.id}/` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,
         body:jsoninfo
     }).then((response) => 
@@ -49,21 +57,33 @@ export const postPostEdit = (info) => {
     })
 }
 
-export const postDelete = (id) =>{
+export const postDelete = (id,cookies) =>{
     const method = "DELETE"
-    return  fetch(`http://localhost:8000/posts/${id}/` ,{
+    return  fetch(`http://localhost:8000/${userid}/posts/${id}/` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,})
 }
-export const postEdit =(id)=>{
+export const postEdit =(id,cookies)=>{
     const method = "PUT"
-    return  fetch(`http://localhost:8000/posts/${id}/` ,{
+    return  fetch(`http://localhost:8000/${userid}/posts/${id}/` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,})
     
 }
-export const addCategory = (cat) =>{
+export const addCategory = (cat,cookies) =>{
     const method = "POST"
     let jsoninfo = JSON.stringify(cat)
-    return  fetch(`http://localhost:8000/addcat/` ,{
+    return  fetch(`http://localhost:8000/${userid}/addcat/` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,
         body:jsoninfo
     }).then((response) => 
@@ -75,16 +95,24 @@ export const addCategory = (cat) =>{
         console.error(error);
     })
 }
-export const rmCategory = (cat) =>{
+export const rmCategory = (cat,cookies) =>{
     const method = "DELETE"
-    return  fetch(`http://localhost:8000/rmcat/${cat}` ,{
+    return  fetch(`http://localhost:8000/${userid}/rmcat/${cat}` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,})
 }
-export const putCategory = (info)=> {
+export const putCategory = (info,cookies)=> {
     let jsoninfo = JSON.stringify(info)
     console.log(jsoninfo)
     const method = "PUT"
-    return  fetch(`http://localhost:8000/editcat/${info.id}` ,{
+    return  fetch(`http://localhost:8000/${userid}/editcat/${info.id}` ,{
+        headers: {
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
+          },
         method:method,
         body:jsoninfo
     }).then((response) => 
@@ -101,7 +129,7 @@ export const putCategory = (info)=> {
 export const getJwt = async (data) => {
     const method = "POST"
         console.log(data)
-    let jsoninfo = JSON.stringify(data)
+
     return await axios.post(`http://localhost:8000/api/token/` ,{
         email:data.email,
         password:data.password

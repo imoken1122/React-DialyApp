@@ -3,11 +3,20 @@ import {fade ,makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
 import CreateIcon from '@material-ui/icons/Create';
 import SearchIcon from '@material-ui/icons/Search';
+import { withCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ReplyIcon from '@material-ui/icons/Reply';
+
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -19,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
     title: {
         paddingLeft:100,
         paddingTop:10,
+        paddingBottom:10,
         fontSize:35,
         color:"#4A8ADA",
       flexGrow: 1,
@@ -27,6 +37,7 @@ const useStyles = makeStyles((theme) => ({
        backgroundColor:"#4A8ADA",
        color:"white",
        margin: theme.spacing(3),
+       marginRight:50,
        '&:hover': {
         backgroundColor: '#0069d9',
         borderColor: '#0062cc',
@@ -72,10 +83,78 @@ const useStyles = makeStyles((theme) => ({
           width: '20ch',
         },
       },
+      mbtn:{
+        padding:20
+      },
+      menu:{
+        paddingTop:10,
+        paddingBottom:40,
+        paddingLeft:80,
+        paddingRight:40,
+        color:"#424242"
+      },
+      menuout:{
+        paddingTop:20,
+        paddingBottom:20,
+        paddingLeft:80,
+        paddingRight:40,
+        backgroundColor:"#FFF2F2",
+      }
 
 }));
 
-function Header(){
+
+
+function SimpleMenu(props) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const classes = useStyles()
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose= () => {
+    setAnchorEl(null);
+
+  };
+  const handleLogout = () => {
+    setAnchorEl(null);
+    props.cookies.remove("dialy-token")
+    window.location.href = "/"
+  }
+
+  return (
+    <div>
+      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick} className={classes.mbtn}>
+        <AccountCircleIcon style={{fontSize:55,color:"#717171"}}/>
+      </Button>
+      <Menu
+        id="simple-menu"
+        anchorEl={anchorEl}
+        keepMounted
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+        className={classes.menu}
+      >
+       <div>
+          <CheckCircleIcon fontSize="large" style={{marginLeft:30,marginBottom:-53,color:"#37E731"}}/>
+          <Box fontWeight={801}  className={classes.menu}>
+            {`${localStorage.getItem("username")} でログイン中`}
+            </Box>
+         </div> 
+        <Divider />
+        <MenuItem onClick={handleLogout}  className={classes.menuout}>
+          <div>
+           {/* <ReplyIcon style={{fontSize:40, marginLeft:-50,marginRight:20,color:"#7E7E7E"}}/> */}
+          </div>
+        <Box textAlign="left" fontWeight={801} fontSize={20} style={{color:"#E13737"}}> ログアウトする</Box>
+        </MenuItem>
+      
+      </Menu>
+    </div>
+  );
+}
+function Header(props){
+  console.log(props)
     const classes = useStyles();
     return (
         <AppBar position="fixed" className={classes.appbar}>
@@ -83,9 +162,9 @@ function Header(){
   
               <Typography variant="h6" className={classes.title}>
                   <Link to={`/posts`} style={{color:"black" ,fontSize:17, textDecoration: "none"}} >
-                      <p className={classes.title}>
+                      <Box fontFamily="Monospace" letterSpacing={-2.8} fontWeight={601} className={classes.title}>
                         Otama
-                      </p>
+                        </Box>
                   </Link>
               </Typography>
           <div className={classes.search}>
@@ -110,21 +189,18 @@ function Header(){
                   to="/post/new"
 
             >
-                 <Typography >
+          <Box fontFamily="Monospace"fontWeight={801} >
                       記事を書く
-                 </Typography>
+                 </Box>
         </Button>
 
         {/*<Button color="inherit">
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
     </Button>*/}
-        <Button color="inherit" className="classes.login">
-        <Typography className={classes.text}>
-            ログイン
-            </Typography>
-            </Button>
+
+        <SimpleMenu cookies={props.cookies}/>
         </Toolbar>
       </AppBar>
     )
 }
-export default Header;
+export default withCookies(Header);

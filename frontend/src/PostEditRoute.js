@@ -5,20 +5,26 @@ import { useParams } from 'react-router-dom';
 import Mde from "./markdown-utils/MdEditer"
 import { getPost } from "./api/getDialy";
 
+import { withCookies } from 'react-cookie';
 
-function PostEditRoute(){
+function PostEditRoute(props){
     const {id} = useParams()
-    const state = {id:'',created_date:'',published_date:'',title:'',text:'',category:''}
+    const state = {id:"",user:localStorage.getItem("userid"),isOpen:"True",created_date:'',published_date:'',title:'',text:'',category:''}
     const [detail, setDetail] = useState(state)
     const [loading, setLoading] = useState(true)
-
+    let isNew = false
     useEffect(()=>{
-        getPost(id).then(d => {
+      if(id != void 0){
+        getPost(id,props.cookies.get("dialy-token")).then(d => {
             setDetail(d)
             setLoading(false)
         }).catch(e =>{
-            throw new Error(e)
-        })
+          throw new Error(e)
+        })}
+        else{
+          setLoading(false) 
+          isNew = true
+        }
     },[])
 
     return (
@@ -26,10 +32,10 @@ function PostEditRoute(){
           {loading ?
                 <></>
                 :
-          <PostEdit id={id} info={detail} />
+          <PostEdit id={id} info={detail} isNew={isNew}/>
         }
       </div>
     )
   }
 
-export default PostEditRoute
+export default withCookies(PostEditRoute)

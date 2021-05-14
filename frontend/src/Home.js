@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useLayoutEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Header from "./Header"
 import Sidebar from './Sidebar';
@@ -16,16 +16,17 @@ const useStyles = makeStyles((theme) => ({
   }));
 function Home(props){
 
+
   const classes = useStyles();
-  const state = {id:'',created_date:"", published_date:'',title:'',category:'',user:{},text:"",isOpen:""}
+
   const [posts, setPosts] = useState([])
   const[loading, setLoading] = useState(true);
 
   useEffect(() => {
     getPostList(props.cookies.get("dialy-token"))
     .then(d => {
-        console.log(d.data)
-        setPosts(d.data)
+        console.log(d)
+        setPosts(d)
         setLoading(false)
     })
     .catch(e => {
@@ -35,8 +36,8 @@ function Home(props){
   console.log(posts)
   return (
     <div className={classes.root}>
-      <Header />
-      <Sidebar cookies={props.cookies}/>
+      <Header cookies={props.cookies}/>
+     <Sidebar cookies={props.cookies}/>
           {loading ?
                 <></>
                 :

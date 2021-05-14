@@ -20,35 +20,38 @@ from rest_framework_jwt.authentication import JSONWebTokenAuthentication #追加
 
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(["GET","POST"])
 @permission_classes([IsAuthenticated])
-def Posts(request):
-    send_token = request.META.get("HTTP_AUTHORIZATION")[4:]
-    if request.method == "GET":
-        posts = Dialy.objects.filter(isOpen="True").order_by('-created_date')
-        sl = serializer.PostsSerializer(posts, many = True).data
+def Posts(request,userid=None):
 
+    print(userid)
+    if request.method == "GET":
+
+        posts = Dialy.objects.filter(isOpen="True",user=userid).order_by('-created_date')
+        sl = serializer.PostsSerializer(posts, many = True).data
+        print(sl)
         return JsonResponse(sl,safe=False)
 
-    elif request.method == "POST":
-
+    if request.method == "POST":
         data = JSONParser().parse(request)
         sl = serializer.PostsSerializer(data=data)
+        print(sl)
         if sl.is_valid():
             sl.save()
             print(sl.data)
             return JsonResponse(sl.data,status = 201)
+        print(sl.errors)
         return JsonResponse(sl.errors, status=400)
- 
+
     #elif request.method == "DELETE":
 
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(["GET",'POST',"PUT","DELETE"])
 @permission_classes([IsAuthenticated])
-def PostDetail(request,pk):
+def PostDetail(request,pk,userid=None):
     try:
-        post = Dialy.objects.get(id = pk)
+        post = Dialy.objects.get(id = pk,user=userid)
     except  Dialy.DoesNotExist:
         return HttpResponse(status=404)
 
@@ -68,11 +71,11 @@ def PostDetail(request,pk):
         post.delete()
         return HttpResponse(status = 204)
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET',"POST"])
 @permission_classes([IsAuthenticated])
-def OPCategory(request):
+def OPCategory(request,userid):
     if request.method == "GET":
-        cat_list = Category.objects.all()
+        cat_list = Category.objects.filter(user = userid)
         print(cat_list)
         sl = serializer.CategorySerializer(cat_list, many = True)
         return JsonResponse(sl.data,safe=False)
@@ -85,21 +88,22 @@ def OPCategory(request):
             sl.save()
             print(sl.data)
             return JsonResponse(sl.data,status = 201)
+        print(sl.errors)
         return JsonResponse(sl.errors, status=400)
 
 @csrf_exempt
-@api_view(['GET'])
+@api_view(['GET',"PUT","DELETE"])
 @permission_classes([IsAuthenticated])
-def RmPutCategory(request,pk):
+def RmPutCategory(request,pk,userid):
     try:
-        cat = Category.objects.get(id = pk)
+        cat = Category.objects.get(id = pk,user = userid)
         print(cat)
     except  Category.DoesNotExist:
         return HttpResponse(status=404) 
     if request.method == "DELETE":
         cat.delete()
 
-        dialy = Dialy.objects.filter(category=cat.category)
+        dialy = Dialy.objects.filter(category=cat.category,user=userid)
         dialy.delete()
         return HttpResponse(status = 204) 
     elif request.method == "PUT":
@@ -129,15 +133,15 @@ def SignUp(request):
 class CategoryDialy(APIView):
 
     permission_classes = [IsAuthenticated]
-    def get(self,request,cat):
+    def get(self,request,cat,userid):
 
         try:
-            dialy = Dialy.objects.filter(isOpen="True",category=cat).order_by('-published_date')
+            dialy = Dialy.objects.filter(isOpen="True",category=cat, user=userid).order_by('-published_date')
             print(dialy,cat)
             res_list =[
                 {
                     "id":d.id,
-                    "published_date":d.published_date,
+                    "created_date":d.created_date,
                     "title":d.title,
                     "category":d.category
 

@@ -1,4 +1,7 @@
 import axios from 'axios';
+
+let userid = localStorage.getItem("userid");
+
 const toJson = async (res) => {
     const json = await res.json();
     if(res.ok){
@@ -9,17 +12,21 @@ const toJson = async (res) => {
 }
 
 export const getPostList = async(cookies) =>{
-    const res = await axios.get("http://localhost:8000/posts",{ 
+
+    const res = await fetch(`http://localhost:8000/${userid}/posts/`,{ 
         headers: {
-            'Authorization': `JWT ${cookies}`
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
           },
+          method:"GET",
+
 
     })
-    return res
+    return await toJson(res)
 }
 
 export const getPost = async (id,cookies) => {
-    const res = await fetch(`http://localhost:8000/posts/${id}`, {
+    const res = await fetch(`http://localhost:8000/${userid}/posts/${id}`, {
         method : 'GET',
         headers: {
             'Authorization': `JWT ${cookies}`
@@ -30,7 +37,7 @@ export const getPost = async (id,cookies) => {
 
 //カテゴリ別一覧を取得
 export const getCategoryPostList = async (cat,cookies) => {
-    const res = await fetch(`http://localhost:8000/posts/folder/${cat}`, {
+    const res = await fetch(`http://localhost:8000/${userid}/posts/folder/${cat}`, {
         headers: {
             'Authorization': `JWT ${cookies}`
           },
@@ -42,9 +49,10 @@ export const getCategoryPostList = async (cat,cookies) => {
 
 export const getCategoryName = async(cookies) =>{
 
-    const res = await fetch(`http://localhost:8000/getcat`, {
+    const res = await fetch(`http://localhost:8000/${userid}/getcat`, {
         headers: {
-            'Authorization': `JWT ${cookies}`
+            "Content-type": "application/json",
+            'Authorization': `JWT ${cookies}`,
           },
         method: 'GET',
 

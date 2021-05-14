@@ -8,6 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types'
 import Button from '@material-ui/core/Button';
 
+import { withCookies } from 'react-cookie';
 import React, { useState, useEffect } from 'react';
 import FolderIcon from '@material-ui/icons/Folder'
 import { makeStyles } from '@material-ui/core/styles';
@@ -41,7 +42,7 @@ function SimpleSelect(props) {
   const [loading, setLoading] = useState(true)
 
   useEffect(()=>{
-    getCategoryName().then(d => {
+    getCategoryName(props.cookies.get("dialy-token")).then(d => {
           setCat(d)
           setLoading(false)
       }).catch(e =>{
@@ -84,7 +85,7 @@ class Mde extends React.Component{
         super(props);
         this.state = {markdown:"",title:"",category:"未分類"}
         this.flag = false
-        if (props.info!=""){
+        if (!props.isNew){
           console.log(props.info)
           this.flag = true
             this.state.title = props.info.title
@@ -138,7 +139,7 @@ class Mde extends React.Component{
                     label="タイトル入力"
                     defaultValue={this.flag ? this.state.title : ""}
                 />
-                <SimpleSelect n={this.state.category} Func={this.updateCat.bind(this)}/>
+                <SimpleSelect n={this.state.category} Func={this.updateCat.bind(this)} cookies={this.props.cookies}/>
                 <TextField
                         multiline
                         rows={h/45}
@@ -171,5 +172,5 @@ Mde.propTypes = {
   };
   
   
-export default Mde;
+export default withCookies(Mde);
 

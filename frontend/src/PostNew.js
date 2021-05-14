@@ -27,7 +27,7 @@ class PostNew extends React.Component {
   render(){
   return (
     <div >
-      <PostEditHeader info={this.info}/>
+      <PostEditHeader info={this.info} />
       <Mde myFunc={this.handlemyFunc.bind(this)} info={""} />
 
     </div>

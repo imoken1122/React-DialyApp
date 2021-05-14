@@ -7,14 +7,14 @@ import Sidebar from './Sidebar';
 import PostList from "./PostList"
 import { getCategoryPostList } from './api/getDialy'
 
-
+import { withCookies } from 'react-cookie';
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
     },
   
   }));
-function FolderPostList(){
+function FolderPostList(props){
 
   const classes = useStyles();
   const state = { isOpen:"True",created_date:'',published_date:'',title:'',category:''}
@@ -23,7 +23,7 @@ function FolderPostList(){
   const {cat} = useParams()
   console.log(cat)
   useEffect(() => {
-    getCategoryPostList(cat)
+    getCategoryPostList(cat,props.cookies.get("dialy-token"))
     .then(d => {
         setCat(d)
         setLoading(false)
@@ -47,5 +47,5 @@ function FolderPostList(){
 }
 
 
-export default FolderPostList;
+export default withCookies(FolderPostList);
 

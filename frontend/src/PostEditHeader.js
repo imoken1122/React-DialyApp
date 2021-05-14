@@ -4,6 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
+import { withCookies } from 'react-cookie';
 
 import { Link } from 'react-router-dom';
 import CheckIcon from '@material-ui/icons/Check';
@@ -65,24 +66,26 @@ const pubtime = () =>{
         +"Z"
     return str
 }
-function handlerClick(info){
+function handlerClick(info,nameid,cookies){
 
-
+    console.log(cookies)
     if(info.title == "" || info.text == ""){
         alert('空欄があります') 
     }else if(info.id){
-        if(info.category == "") info.category = "未分類"
+
         info.published_date = pubtime()
-        postPostEdit(info)  
+        postPostEdit(info,cookies)  
     }else {
-        if(info.category == "") info.category = "未分類"
+
+
         info.published_date = pubtime()
         info.created_date = pubtime()
-        postPost(info)
+        postPost(info,cookies)
     }
 }
 function PostEditHeader(props){
     const classes = useStyles();
+
     const preventDefault = (event) => event.preventDefault();
     return (
         <AppBar position="fixed" className={classes.appbar}>
@@ -102,7 +105,7 @@ function PostEditHeader(props){
                 size="large"
                 component={Link}
                 to={`/posts`}
-                onClick={()=>{handlerClick(props.info)}}
+                onClick={()=>{handlerClick(props.info, props.nameid,props.cookies.get("dialy-token"))}}
             >
                  <Typography >
                     投稿する
@@ -115,4 +118,4 @@ function PostEditHeader(props){
     )
 
 }
-export default PostEditHeader;
+export default withCookies(PostEditHeader);

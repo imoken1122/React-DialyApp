@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PostEditHeader from "./PostEditHeader"
 import { useParams } from 'react-router-dom';
 import Mde from "./markdown-utils/MdEditer"
+
 import { getPost } from "./api/getDialy";
 
 
@@ -22,10 +23,13 @@ class PostEdit extends React.Component {
   }
   
   render(){
+
+    
   return (
     <div >
+
       <PostEditHeader info={this.info}/>
-      <Mde myFunc={this.handlemyFunc.bind(this)} info={this.info} />
+      <Mde myFunc={this.handlemyFunc.bind(this)} info={this.info} isNew={this.isNew} />
 
     </div>
 );

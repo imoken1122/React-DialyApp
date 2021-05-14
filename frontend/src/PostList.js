@@ -3,7 +3,9 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 
+import { withCookies } from 'react-cookie';
 import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
@@ -24,6 +26,7 @@ import {postDelete, postEdit} from "./api/postDialy"
 import { mergeClasses } from '@material-ui/styles';
 let pushFlag =false 
 let cnt = 0
+let cookies
 const useStyles = makeStyles((theme) => ({
     root: {
         width: 'auto',
@@ -75,6 +78,7 @@ const options = [
   
 const ITEM_HEIGHT = 48;
 function LongMenu(props) {
+
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
   
@@ -91,7 +95,7 @@ function LongMenu(props) {
         handleClose()
     };
     const HandleRemove =(id) =>{
-        postDelete(id)
+        postDelete(id,cookies)
         handleClose()
         window.location.reload()
     }
@@ -130,7 +134,7 @@ function LongMenu(props) {
              </MenuItem>
             </Link>
             <MenuItem key={options[1]} selected={options[1] === 'Pyxis'} onClick={() => HandleRemove(props.id)}>
-              {options[1]}
+            <Box fontWeight="fontWeightMedium" color="#E13737">{options[1]}</Box>
             </MenuItem>
 
 
@@ -180,7 +184,8 @@ function SubPost(props){
 
 function PostList(props){
     const classes = useStyles()
-
+    cookies = props.cookies.get("dialy-token")
+    console.log(props)
     return (
 
         <div className={classes.root}>
@@ -206,4 +211,4 @@ function PostList(props){
     );
 }
 
-export default PostList;
+export default withCookies(PostList);

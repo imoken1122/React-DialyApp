@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
+import Box from '@material-ui/core/Box';
 import Drawer from '@material-ui/core/Drawer';
 import FolderIcon from '@material-ui/icons/Folder'
 import List from '@material-ui/core/List';
@@ -31,11 +32,13 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { PostAddSharp } from '@material-ui/icons';
 import {rmCategory, putCategory} from "./api/postDialy"
 import { mergeClasses } from '@material-ui/styles'
+import {useContext} from 'react'
 const drawerWidth = 350;
 let pushFlag =false 
 let cnt = 0
 let dcnt = 0
 let inCat = 0
+let cookies = ""
 const useStyles = makeStyles((theme) => ({
     drawer: {
         width: drawerWidth,
@@ -105,10 +108,10 @@ function DialogComponet(props){
     if (confirminCat(name)){
       if(props.info) {
         props.info.category = name
-        console.log(props.info)
-        putCategory(props.info)
+
+        putCategory(props.info,cookies)
       }
-      else addCategory({category:name})
+      else addCategory({category:name,user:localStorage.getItem("userid")},cookies)
       window.location.reload()
     }else{
       alert("同じフォルダがあります")
@@ -164,7 +167,9 @@ function DialogSelect() {
               className={classes.addfolder}
               startIcon={ <CreateNewFolderIcon fontSize="large" className={classes.iconcolor} />}
           >
+          <Box fontFamily="Monospace" fontWeight={601} >
               新規フォルダ
+            </Box>
           </Button>
         <DialogComponet open={open} setOpen={setOpen}/> 
   </>
@@ -200,11 +205,12 @@ function LongMenu(props) {
   };
 
   const handleEdit = (info) => {
-      putCategory(info)
+    console.log(cookies)
+      putCategory(info,cookies)
       handleClose()
   };
   const HandleRemove =(id) =>{
-      rmCategory(id)
+      rmCategory(id,cookies)
       handleClose()
       window.location.reload()
   }
@@ -242,7 +248,7 @@ function LongMenu(props) {
             <DialogComponet open={dialogopen} setOpen={setDialogOpen} info={props.info}/>
            </MenuItem>
           <MenuItem component={Link} to={"/posts"} key={options[1]} selected={options[1] === 'Pyxis'} onClick={() => HandleRemove(props.info.id)}>
-            {options[1]}
+            <Box color="#E13737">{options[1]}</Box>
           </MenuItem>
 
 
@@ -255,6 +261,7 @@ function Sidebar(props){
     const state = {id:"",category:""}
     const [cat, setCat] = useState(state)
     const [loading, setLoading] = useState(true)
+    cookies =props.cookies.get("dialy-token")
     const handlelist = (e) =>{
       if (pushFlag){
         e.preventDefault()
@@ -291,9 +298,9 @@ function Sidebar(props){
         <div className={classes.drawrContainer} />
         <Divider />
         <div　style={{position:"fixed", paddingTop:10,marginTop:90,backgroundColor:"#F4F5FB",paddingRight:88, zIndex:1}}>
-            <Typography variant="h6" className={classes.title}>
+          <Box fontFamily="Monospace"fontWeight={801} className={classes.title}>
                 フォルダー
-            </Typography>
+                </Box>
             
             <DialogSelect />
         <Divider style={{marginTop:13}}/>

@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios'
-import { Redirect } from 'react-router-dom';
+import { Redirect,useHistory } from 'react-router-dom';
 import { withCookies } from 'react-cookie';
-import {getJwt, signup} from "../api/postDialy"
-import { DataUsage } from '@material-ui/icons';
-
 const LoggedIn = (props) => {
+
+    const history = useHistory();
     if (props.cookies.get("dialy-token")){
         console.log(props.cookies)
         const data = {token : props.cookies.get('dialy-token')}
@@ -13,11 +12,13 @@ const LoggedIn = (props) => {
             headers: {
             'content-type': 'application/json'
           }}).then(res => {
+             localStorage.setItem("userid",res.data.user.id)
         }).catch(err => {
             alert("再度ログインが必要です")
             props.cookies.remove("dialy-token")
-            window.location.href="/signin"
+            history.push('/');
         })
+        console.log(4)
         return props.children
     }
     else{

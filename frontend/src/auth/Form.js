@@ -2,10 +2,12 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useContext} from 'react';
 import  { useHistory } from 'react-router-dom';
 import {getJwt, signup} from "../api/postDialy"
 import { withCookies } from 'react-cookie'
+import { TramRounded } from '@material-ui/icons';
+
 function sleep(a){
     var dt1 = new Date().getTime();
     var dt2 = new Date().getTime();
@@ -16,7 +18,7 @@ function sleep(a){
   }
 const Form = (props) => {
 
-    console.log(props.nameFunc)
+
     const history = useHistory()
     let info = {"email":"","name":"","password":""}
     if (props.login){
@@ -29,32 +31,40 @@ const Form = (props) => {
             getJwt(userinfo).then(res => {
 
                 props.cookies.set("dialy-token", res.data.token)
-                console.log(res.data.user)
-                props.nameFunc(res.data.user.id)
-                window.location.href="/posts"
+              
+             localStorage.setItem("userid",res.data.user.id)
+             localStorage.setItem("username",res.data.user.name)
 
+             window.location.href = `/posts`
             }).catch(err=>{
                 console.log(err)
-                alert("username or password が違います")
+                alert("メールアドレス か パスワード が違います")
+
             })
         }
     const handlerSignup = () => {
         const jwtinfo = {"email":userinfo.email,"password":userinfo.password}
+        let flag = true
         getJwt(jwtinfo).then(res => {
             alert("このメールアドレスは登録されています")
-        }).catch(ok => {
-            signup(userinfo)
-            sleep(2500)
+            
+        }).catch(e => {signup(userinfo)
+            sleep(2000)
             getJwt(jwtinfo).then(res => {
                 console.log(res)
                 props.cookies.set("dialy-token", res.data.token)
-                props.nameFunc(res.data.name)
+               
+             localStorage.setItem("userid",res.data.user.id)
+             localStorage.setItem("username",res.data.user.name)
                 window.location.href="/posts"
             }).catch(err=>{
                     console.log(err)
-                    alert("予期しないエラー")
+                    alert("サインアップに失敗しました")
+                    history.push(`/`) 
+
                 })
         })
+
 
     }
     const onChangehandler = (e) => {

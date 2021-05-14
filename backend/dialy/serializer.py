@@ -37,9 +37,10 @@ class UserSerializerWithToken(sz.ModelSerializer):
 
 
 class PostsSerializer(sz.ModelSerializer):
-    user = UserSerializerWithToken()
+    #user = UserSerializerWithToken()
     class Meta: 
         model = Dialy
+        #fields = ("id","user","isOpen","created_date","published_date","title","text","category")
         fields = "__all__"
 
     #{"created_date":"2014-10-10T13:50:40Z","published_date":"2014-10-10T13:50:40Z","text": "aaa", "title": "aaa", "category": "aaa"}

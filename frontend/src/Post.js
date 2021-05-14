@@ -49,7 +49,7 @@ function Post(props) {
   const classes = useStyles1();
 
     useEffect(()=>{
-        getPost(id,props.cookies.get("dialy-token")).then(d => {
+        getPost(id,props.cookies.get("dialy-token"), props.nameid).then(d => {
             setDetail(d)
             setLoading(false)
         }).catch(e =>{
