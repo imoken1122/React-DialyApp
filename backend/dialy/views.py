@@ -29,13 +29,11 @@ def Posts(request,userid=None):
 
         posts = Dialy.objects.filter(isOpen="True",user=userid).order_by('-created_date')
         sl = serializer.PostsSerializer(posts, many = True).data
-        print(sl)
         return JsonResponse(sl,safe=False)
 
     if request.method == "POST":
         data = JSONParser().parse(request)
         sl = serializer.PostsSerializer(data=data)
-        print(sl)
         if sl.is_valid():
             sl.save()
             print(sl.data)
@@ -76,17 +74,14 @@ def PostDetail(request,pk,userid=None):
 def OPCategory(request,userid):
     if request.method == "GET":
         cat_list = Category.objects.filter(user = userid)
-        print(cat_list)
         sl = serializer.CategorySerializer(cat_list, many = True)
         return JsonResponse(sl.data,safe=False)
 
     elif request.method == "POST":
-        print(request)
         data = JSONParser().parse(request)
         sl = serializer.CategorySerializer(data=data)
         if sl.is_valid():
             sl.save()
-            print(sl.data)
             return JsonResponse(sl.data,status = 201)
         print(sl.errors)
         return JsonResponse(sl.errors, status=400)
@@ -97,7 +92,6 @@ def OPCategory(request,userid):
 def RmPutCategory(request,pk,userid):
     try:
         cat = Category.objects.get(id = pk,user = userid)
-        print(cat)
     except  Category.DoesNotExist:
         return HttpResponse(status=404) 
     if request.method == "DELETE":
@@ -159,7 +153,6 @@ class SignUp(APIView):
 
     def post(self,request):
         user = request.data
-        print(user)
         if not user:
             return Response({'response' : 'error', 'message' : 'No data found'})
         sl = serializer.UserSerializerWithToken(data = user)

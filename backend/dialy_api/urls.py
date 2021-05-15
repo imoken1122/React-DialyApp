@@ -15,9 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
+from rest_framework_jwt.views import  obtain_jwt_token, verify_jwt_token, refresh_jwt_token
+from dialy import views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('dialy.urls')),
-    path('api/v1/auth/', include('djoser.urls.jwt'))
+    path('<int:userid>/', include('dialy.urls')),
+    path('api/token/', obtain_jwt_token),
+    path('api/token/verify/', verify_jwt_token), #追加
+    path('api/token/refresh/', refresh_jwt_token), 
+    path("signup/", views.SignUp.as_view())
 ]

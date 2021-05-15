@@ -26,7 +26,7 @@ SECRET_KEY = 'j94050(xj15v608t_(a9#4bkxk!$t6nhaw%6swiok8kvd--&a('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,24 +39,28 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "rest_framework",
-    "rest_framework.authtoken",
-    "djoser",
     "markdownx",
     "corsheaders",
+    "rest_framework.authtoken",
     "dialy"
 ]
 REST_FRAMEWORK = { #これも追加
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+       'rest_framework.permissions.IsAuthenticated',
+      # 'rest_framework.permissions.AllowAny',
     ],
       'DEFAULT_AUTHENTICATION_CLASSES': [
         #Simple JWTを読み込む
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+'rest_framework_jwt.authentication.JSONWebTokenAuthentication'
+
     ]
 }
-SIMPLE_JWT = {
+JWT_AUTH = {
     #トークンの時間を5分に設定
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+     'JWT_VERIFY_EXPIRATION': False,
+    'ACCESS_TOKEN_LIFETIME': timedelta(days = 365),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': False,
@@ -69,6 +73,7 @@ SIMPLE_JWT = {
     'USER_ID_CLAIM': 'user_id',
     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'TOKEN_TYPE_CLAIM': 'token_type',
+        'JWT_RESPONSE_PAYLOAD_HANDLER' :   'dialy.utils.custom_jwt_response_handler'
 }
 MIDDLEWARE = [
      'corsheaders.middleware.CorsMiddleware', #
@@ -84,6 +89,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = (  # これ
     'http://localhost:3000', 
 )
+CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'dialy_api.urls'
 
 TEMPLATES = [
