@@ -66,7 +66,7 @@ const pubtime = () =>{
         +"Z"
     return str
 }
-function handlerClick(info,nameid,cookies){
+function handlerClick(info,cookies){
 
     console.log(cookies)
     if(info.title == "" || info.text == ""){
@@ -81,6 +81,7 @@ function handlerClick(info,nameid,cookies){
         info.published_date = pubtime()
         info.created_date = pubtime()
         postPost(info,cookies)
+        window.location.href = "/posts"
     }
 }
 function PostEditHeader(props){
@@ -102,9 +103,7 @@ function PostEditHeader(props){
                 className={classes.pubbutton}
                 startIcon={<CheckIcon fontSize="large" />}
                 size="large"
-                component={Link}
-                to={`/posts`}
-                onClick={()=>{handlerClick(props.info, props.nameid,props.cookies.get("dialy-token"))}}
+                onClick={()=>{handlerClick(props.info, props.cookies.get("dialy-token"))}}
             >
                  <Box fontFamily="Monospace" fontSize={15} fontWeight={801} >
                     投稿する

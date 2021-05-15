@@ -1,5 +1,5 @@
 
-import React,{useEffect,useState} from 'react';
+import React,{useLayoutEffect,useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Header from "./Header"
 import Sidebar from './Sidebar';
@@ -24,7 +24,7 @@ function Home(props){
   let [posts, setPosts] = useState([])
   const [loading, setLoading] = useState(true);
   let flag = cat == void 0
-  useEffect(() => {
+  useLayoutEffect(() => {
       const post = flag ? 
       getPostList(props.cookies.get("dialy-token")) 
       :
@@ -42,7 +42,7 @@ function Home(props){
       })
 
 
-    },[flag ? props.cookie : cat])
+    },[flag ? props.cookies : cat])
     console.log(posts)
   const classes = useStyles();
 
