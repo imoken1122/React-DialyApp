@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { withCookies } from 'react-cookie';
 
+import Box from '@material-ui/core/Box';
 import { Link } from 'react-router-dom';
 import CheckIcon from '@material-ui/icons/Check';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
@@ -99,15 +100,15 @@ function PostEditHeader(props){
           <Button
             variant="contained"
                 className={classes.pubbutton}
-                startIcon={<CheckIcon fontSize="midium" />}
+                startIcon={<CheckIcon fontSize="large" />}
                 size="large"
                 component={Link}
                 to={`/posts`}
                 onClick={()=>{handlerClick(props.info, props.nameid,props.cookies.get("dialy-token"))}}
             >
-                 <Typography >
+                 <Box fontFamily="Monospace" fontSize={15} fontWeight={801} >
                     投稿する
-                 </Typography>
+                 </Box>
         </Button>
 
         </Toolbar>
