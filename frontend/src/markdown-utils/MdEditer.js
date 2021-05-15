@@ -6,27 +6,19 @@ import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import PropTypes from 'prop-types'
-import Button from '@material-ui/core/Button';
-
 import { withCookies } from 'react-cookie';
 import React, { useState, useEffect } from 'react';
-import FolderIcon from '@material-ui/icons/Folder'
 import { makeStyles } from '@material-ui/core/styles';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import InputLabel from '@material-ui/core/InputLabel';
-import Input from '@material-ui/core/Input';
 import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import {getCategoryName} from "../api/getDialy"
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 150,
+    minWidth: 160,
     marginTop:100
   },
   selectEmpty: {
@@ -59,12 +51,13 @@ function SimpleSelect(props) {
   return (
     <div>
      <FormControl variant="outlined" className={classes.formControl}>
-
+     <InputLabel >フォルダ</InputLabel>
         <Select
         inputProps={{ 'aria-label': 'Without label' }}
         displayEmpty
           value={fdname}
           onChange={handleChange}
+          label="フォルダ"
 
         >
       <MenuItem value="未分類">
@@ -75,7 +68,6 @@ function SimpleSelect(props) {
           <MenuItem value={d.category}>{d.category}</MenuItem>
         )}
         </Select>
-        <FormHelperText>フォルダ選択...</FormHelperText>
       </FormControl>
 </div>
   )}
@@ -131,19 +123,22 @@ class Mde extends React.Component{
         return(
             <div className={this.classes.root}>
                 <TextField 
-                    inputProps={{style: {fontSize: 30, lineHeight:1.4}}} 
+                    inputProps={{style: {fontSize: 30, lineHeight:1.4,backgroundColor:"#FAFAFA"}}} 
                     style = {{width: '50%' , top:80, marginRight:50}}
                     onChange={this.updateTitle}
 
                     variant="filled"
+                    color="#F2F5F8"
                     label="タイトル入力"
                     defaultValue={this.flag ? this.state.title : ""}
                 />
                 <SimpleSelect n={this.state.category} Func={this.updateCat.bind(this)} cookies={this.props.cookies}/>
+
                 <TextField
                         multiline
+                        color="#F2F5F8"
                         rows={h/45}
-                        inputProps={{style: {fontSize: 20, lineHeight:1.4}}} 
+                        inputProps={{style: {fontSize: 20 ,lineHeight:1.5,backgroundColor:"#transparent" }}} 
                         variant="filled"
                         style = {{width: '50%', top:6, marginRight:60}}
                         onChange={this.updateMD}
@@ -151,7 +146,8 @@ class Mde extends React.Component{
                            label="Markdownで本文を入力..."
                     defaultValue={this.flag ? this.state.markdown : ""}
                         />
-                <Box style = {{width: '44%',height:h-136,  display: "inline-block",marginTop:-165, overflow:"scroll" }} >
+
+                <Box style = {{width: '44%',height:h-136,  display: "inline-block",marginTop:-160, overflow:"scroll" }} >
                     <InputBase
                             style = {{fontSize:35,color:"black",marginTop:0}}
                             disabled

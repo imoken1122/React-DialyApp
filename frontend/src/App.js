@@ -1,9 +1,7 @@
 
 import React from 'react';
-import PostNew from "./PostNew"
 import PostEditRoute from "./PostEditRoute"
-import FolderPostList from "./FolderPostList"
-import Post from "./Post"
+
 import Home from "./Home"
 import AuthView from "./auth/AuthView"
 import { BrowserRouter as Router, Route, Switch,Redirect } from 'react-router-dom';
@@ -28,17 +26,12 @@ const App = () => {
               <LoggedIn >
                 <Switch>
                     <Route exact path={`/posts`} component={Home} />
-                    <Route exact path={`/posts/:id`} component={Post} />
+                    <Route exact path={`/posts/folder/:cat`} component={Home} />
+                    <Route exact path={`/posts/:id`} component={Home} />
                     <Route exact path={`/post/new`} component={PostEditRoute} />
                     <Route exact path={`/post/edit/:id`} component={PostEditRoute} />
-                    <Route exact path={`/posts/folder/:cat`} component={FolderPostList} />
-                    {/*<Route exact path={`/${user.name}/posts`} render={props => <Home nameid={user.id} {...props} />} />
-                    <Route exact path={`/${user.name}/posts/:id`} render={props => <Post nameid={user.id} {...props} />}/>
-                    <Route exact path={`/${user.name}/post/new`} render={props => <PostNew nameid={user.id} {...props} />} />
-                    <Route exact path={`/${user.name}/post/edit/:id`}  render={props => <PostEditRoute nameid={user.id} {...props} />} />
-                    <Route exact path={`/${user.name}/posts/folder/:cat`} render={props => <FolderPostList nameid={user.id} {...props} />}/>
-                    */}
-                      <Route component={Home}/>
+                  
+                    <Redirect to="/posts" /> 
                 </Switch>
                </LoggedIn>
             </CookiesProvider>

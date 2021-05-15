@@ -2,11 +2,10 @@
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Box from '@material-ui/core/Box';
-import React, { useState, useContext} from 'react';
+import React, { useState} from 'react';
 import  { useHistory } from 'react-router-dom';
 import {getJwt, signup} from "../api/postDialy"
 import { withCookies } from 'react-cookie'
-import { TramRounded } from '@material-ui/icons';
 
 function sleep(a){
     var dt1 = new Date().getTime();
@@ -27,7 +26,7 @@ const Form = (props) => {
     const [userinfo,setUserInfo] = useState(info)
 
     const handlerLogin = () => {
-            console.log(userinfo)
+
             getJwt(userinfo).then(res => {
 
                 props.cookies.set("dialy-token", res.data.token)
@@ -39,12 +38,13 @@ const Form = (props) => {
             }).catch(err=>{
                 console.log(err)
                 alert("メールアドレス か パスワード が違います")
+                window.location.href = `/signin`
 
             })
         }
     const handlerSignup = () => {
         const jwtinfo = {"email":userinfo.email,"password":userinfo.password}
-        let flag = true
+
         getJwt(jwtinfo).then(res => {
             alert("このメールアドレスは登録されています")
             

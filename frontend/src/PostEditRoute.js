@@ -1,8 +1,6 @@
 import React , {useState, useEffect} from "react"
-import { makeStyles } from '@material-ui/core/styles';
 import PostEdit from "./PostEdit"
 import { useParams } from 'react-router-dom';
-import Mde from "./markdown-utils/MdEditer"
 import { getPost } from "./api/getDialy";
 
 import { withCookies } from 'react-cookie';

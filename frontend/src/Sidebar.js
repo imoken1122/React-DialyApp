@@ -1,11 +1,8 @@
 
 import { makeStyles } from '@material-ui/core/styles';
-
 import { withCookies } from 'react-cookie';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import Box from '@material-ui/core/Box';
@@ -20,8 +17,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Alert from '@material-ui/lab/Alert';
 import {getCategoryName } from "./api/getDialy"
 import TextField from '@material-ui/core/TextField';
 import {addCategory} from "./api/postDialy"
@@ -29,10 +24,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { PostAddSharp } from '@material-ui/icons';
 import {rmCategory, putCategory} from "./api/postDialy"
-import { mergeClasses } from '@material-ui/styles'
-import {useContext} from 'react'
 const drawerWidth = 350;
 let pushFlag =false 
 let cnt = 0
@@ -60,8 +52,9 @@ const useStyles = makeStyles((theme) => ({
     },
     title: {
         flexGrow: 1,
-        margin:"30px 0px 20px 20px",
-        display: "inline-block"
+        margin:"30px -23px 20px 40px",
+        display: "inline-block",
+        color:"#5B5B5B"
       },
     addfolder:{
         left:80,
@@ -167,7 +160,7 @@ function DialogSelect() {
               className={classes.addfolder}
               startIcon={ <CreateNewFolderIcon fontSize="large" className={classes.iconcolor} />}
           >
-          <Box fontFamily="Monospace" fontWeight={601} >
+          <Box fontFamily="Monospace" fontWeight={601} color="#5B5B5B" >
               新規フォルダ
             </Box>
           </Button>
@@ -312,13 +305,21 @@ function Sidebar(props){
             <Link to={`/posts`} style={{color:"black" ,fontSize:17, textDecoration: "none"}} >
                <ListItem button >
                   <ListItemIcon><FolderIcon fontSize="large" className={classes.iconcolor}/></ListItemIcon>
-                <ListItemText primary="すべて" />
+                  <ListItemText  >
+                <Box fontFamily="Monospace" fontWeight={601} color="#6D6D6D" >
+                  すべて   
+                  </Box>
+                  </ListItemText>
             </ListItem>
                 </Link>
             <Link to={`/posts/folder/未分類`} style={{color:"black" ,fontSize:17, textDecoration: "none"}} >
                 <ListItem button >
                   <ListItemIcon><FolderIcon fontSize="large" className={classes.iconcolor}/></ListItemIcon>
-                <ListItemText primary="未分類" />
+                  <ListItemText  >
+                <Box fontFamily="Monospace" fontWeight={601} color="#6D6D6D" >
+                  未分類
+                  </Box>
+                  </ListItemText>
               </ListItem>
            </Link>
 
@@ -326,7 +327,12 @@ function Sidebar(props){
 
             <ListItem button key={index} onClick={handlelist} component={Link} to={`/posts/folder/${d.category}`} style={{color:"black" ,fontSize:17, textDecoration: "none"}} >
                 <ListItemIcon><FolderIcon fontSize="large" className={classes.iconcolor}/></ListItemIcon>
-                <ListItemText primary={d.category} />
+                
+                <ListItemText  >
+                <Box fontFamily="Monospace" fontWeight={601} color="#6D6D6D" >
+                  {d.category}
+                  </Box>
+                  </ListItemText>
                 <LongMenu info={d}/>
             </ListItem>
 

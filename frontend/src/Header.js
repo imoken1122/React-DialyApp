@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useContext } from 'react';
 import {fade ,makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -16,7 +16,7 @@ import InputBase from '@material-ui/core/InputBase';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ReplyIcon from '@material-ui/icons/Reply';
-
+import {loadContext} from "./Home"
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -108,6 +108,8 @@ const useStyles = makeStyles((theme) => ({
 function SimpleMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const classes = useStyles()
+  let [posts,setPosts] = useContext(loadContext)
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -118,8 +120,13 @@ function SimpleMenu(props) {
   };
   const handleLogout = () => {
     setAnchorEl(null);
+    setPosts([])
+    posts = []
+    console.log(posts)
     props.cookies.remove("dialy-token")
+    localStorage.removeItem("userid")
     window.location.href = "/"
+
   }
 
   return (
@@ -142,12 +149,15 @@ function SimpleMenu(props) {
             </Box>
          </div> 
         <Divider />
-        <MenuItem onClick={handleLogout}  className={classes.menuout}>
-          <div>
-           {/* <ReplyIcon style={{fontSize:40, marginLeft:-50,marginRight:20,color:"#7E7E7E"}}/> */}
-          </div>
-        <Box textAlign="left" fontWeight={801} fontSize={20} style={{color:"#E13737"}}> ログアウトする</Box>
-        </MenuItem>
+
+          <MenuItem onClick={ handleLogout}  className={classes.menuout}>
+            <div>
+            {/* <ReplyIcon style={{fontSize:40, marginLeft:-50,marginRight:20,color:"#7E7E7E"}}/> */}
+            </div>
+      
+              <Box textAlign="left" fontWeight={801} fontSize={20} style={{color:"#E13737"}}> ログアウトする</Box>
+          </MenuItem>
+
       
       </Menu>
     </div>
@@ -198,7 +208,7 @@ function Header(props){
           <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
     </Button>*/}
 
-        <SimpleMenu cookies={props.cookies}/>
+        <SimpleMenu cookies={props.cookies} />
         </Toolbar>
       </AppBar>
     )

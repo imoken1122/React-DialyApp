@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { useParams,Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import Header from "./Header"
 import MDViewer from "./markdown-utils/MdViewer"
 import marked from 'marked';
 
+import Box from '@material-ui/core/Box';
 import { withCookies } from 'react-cookie';
 import CreateIcon from '@material-ui/icons/Create';
 import Container from '@material-ui/core/Container';
@@ -30,6 +30,7 @@ const useStyles1 = makeStyles((theme) => ({
     },
     editbutton:{
         marginLeft:700,
+        backgroundColor:"#EBEFF3"
 
     }
   }));
@@ -44,8 +45,7 @@ function Post(props) {
   const state = {id:'',created_date:'',published_date:'',title:'',text:'',category:''}
   const [detail, setDetail] = useState(state)
   const [loading, setLoading] = useState(true)
-  const {id} = useParams()
-
+    let id = props.id
   const classes = useStyles1();
 
     useEffect(()=>{
@@ -61,7 +61,6 @@ function Post(props) {
   return (
       
     <div className={classes.root}>
-        <Header />
         {loading ?
                 <></>
                 :
@@ -82,9 +81,9 @@ function Post(props) {
                         className={classes.editbutton}
                            component={Link}
                             to={`/post/edit/${id}`}>
-                        <Typography >
+                      <Box fontFamily="Monospace" fontSize={18} fontWeight={601} color="#525252" >
                             編集する
-                        </Typography>
+                        </Box>
                 </Button>
 
                 <InputBase
@@ -98,7 +97,7 @@ function Post(props) {
                     style = {{fontSize:15,color:"#434343",marginTop:0,marginLeft:20}}
                     disabled
                     fullWidth
-                    value={detail.published_date ?`${tf(detail.published_date)}  編集` : ""}
+                    value={detail.published_date ?`${tf(detail.published_date)}   編集` : ""}
 
                 />
             <Divider  style = {{position:"reactive",marginTop:40}}/>

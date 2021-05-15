@@ -2,28 +2,21 @@
 
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-
 import { withCookies } from 'react-cookie';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
-
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import IconButton from '@material-ui/core/IconButton';
-import DescriptionIcon from '@material-ui/icons/Description';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import { Redirect,Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-
-
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { PostAddSharp } from '@material-ui/icons';
-import {postDelete, postEdit} from "./api/postDialy"
-import { mergeClasses } from '@material-ui/styles';
+import {postDelete} from "./api/postDialy"
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 let pushFlag =false 
 let cnt = 0
 let cookies
@@ -54,8 +47,9 @@ const useStyles = makeStyles((theme) => ({
         zIndex:1
     },
     icon:{
-
-        color:"#E1E4F5"
+        fontSize:55,
+        marginRight:20,
+        color:"#AFD6FF"
     },
     foldername:{
         fontSize:38,
@@ -167,15 +161,19 @@ function SubPost(props){
 
     return(
         <>
-      <ListItem button key={props.id} onClick={handlelist} component={Link} style={{color:"black" ,fontSize:17, textDecoration: "none"}} to={`/posts/${props.id}`} >
-              <ListItemIcon><DescriptionIcon className={classes.icon}  fontSize="large"/></ListItemIcon>
-              <ListItemText >
-                  <p style={{fontSize:20}}>{props.title}</p>
-               </ListItemText>
+      <ListItem button key={props.id} onClick={handlelist} component={Link} style={{paddingTop:20,paddingBottom:20,}} to={`/posts/${props.id}`} >
+              <ListItemIcon><DescriptionOutlinedIcon className={classes.icon}/></ListItemIcon>
+           
+               <ListItemText  >
+                <Box fontFamily="Monospace" fontSize={23} fontWeight={401} color="#525252" >
+                {props.title} 
+                  </Box>
+                  </ListItemText>
               <Typography >{tf(props.created_date)}</Typography> 
 
               <LongMenu id={props.id} className={classes.menu} />
       </ListItem>
+        <Divider variant="inset" component="li" />
     </>
   );
 }
@@ -192,7 +190,7 @@ function PostList(props){
             <div className={classes.subheader}>
               <Typography className={classes.foldername}>
                 
-                  {props.title} 
+                  {props.cat} 
               </Typography>
               <Divider  />
             </div>
@@ -202,7 +200,6 @@ function PostList(props){
 
                       <SubPost {...d}/> 
 
-                      <Divider variant="inset" component="li" />
                   </div>
                   )}
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import {fade ,makeStyles } from '@material-ui/core/styles';
+import {makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -56,7 +56,6 @@ const useStyles = makeStyles((theme) => ({
   
 }));
 const pubtime = () =>{
-    const b = new Date(Date.now() + ((new Date().getTimezoneOffset() + (9 * 60)) * 60 * 1000));
     const a = new Date()
     var str = a.getFullYear()
         + '-' + ('0' + (a.getMonth() + 1)).slice(-2)
@@ -86,7 +85,6 @@ function handlerClick(info,nameid,cookies){
 function PostEditHeader(props){
     const classes = useStyles();
 
-    const preventDefault = (event) => event.preventDefault();
     return (
         <AppBar position="fixed" className={classes.appbar}>
         <Toolbar>
