@@ -10,6 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { withCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
+import LogoIcon from "./images/Logo.js" 
 import MenuItem from '@material-ui/core/MenuItem';
 import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
@@ -172,9 +173,8 @@ function Header(props){
   
               <Typography variant="h6" className={classes.title}>
                   <Link to={`/posts`} style={{color:"black" ,fontSize:17, textDecoration: "none"}} >
-                      <Box fontFamily="Monospace" letterSpacing={-2.8} fontWeight={601} className={classes.title}>
-                        Otama
-                        </Box>
+                  <LogoIcon style={{backgroundColor:"transparent",width:160,marginBottom:-38,marginTop:-15}}/>
+
                   </Link>
               </Typography>
           <div className={classes.search}>

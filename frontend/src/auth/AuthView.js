@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-
+import LogoIcon from "../images/Logo.js" 
 import {  withCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -60,11 +60,11 @@ function AuthView(props) {
             <div className={classes.paper}>
                 <Paper elevation={3}>
                     <div align="center" style={{backgroundColor :"white",height:200, marginBottom:85}} >
-
-                        <Box fontWeight={801} letterSpacing={-6} m={1} fontFamily="Monospace"  style={{fontSize:80,color:"#4A8ADA",paddingTop:70}}>
+                        <LogoIcon style={{backgroundColor:"transparent",width:"85%",marginTop:30, marginLeft:10}} />
+                        {/*<Box fontWeight={801} letterSpacing={-6} m={1} fontFamily="Monospace"  style={{fontSize:80,color:"#4A8ADA",paddingTop:70}}>
                             Otama
-                        </Box>
-                        <Box fontWeight={854} fontFamily="Monospace" style={{fontSize:20,color:"#333333",marginTop:-20}}>
+                           </Box> */}
+                        <Box fontWeight={854} fontFamily="Monospace" style={{fontSize:20,color:"#333333",marginTop:-95, zIndex:1}}>
                             自分の毎日を記録しよう
                         </Box>
                 
